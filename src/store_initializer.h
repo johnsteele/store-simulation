@@ -1,34 +1,39 @@
 /**
  * @file store_initializer.h 
  * 
- * @brief StoreInitializer class initializes the store. 
+ * @brief StoreInitializer class initializes the stores' Customer, 
+ * 	  Transaction, and Inventory. 
+ *
+ * @brief The StoreInitializer has-a Factory. The factory 
+
+
+ *	  StoreManager, which stores the Customer, Inventory and 
+ *	  Transaction objects after they have been instantiated. 
+ *	  The instantiation for Customer and Transaction objects 
+ *	  happen within this class. The StoreInitializer has-a
+ *	  ItemFactory, which is used to create the Inventory 
+ *	  objects. The ItemFactory is used to abstract the type
+ *	  of Inventory objects being instantiated. 
+ *
+ * @brief After the stores' Customer, Transaction, and Inventory 
+ *	  has been initialized, control is passed to the 
+ *	  StoremManager for processing the transactions.
+ *
  * @brief CSS 343 - Lab 4
  *
  * @author John Steele  \<steelejr@u.washington.edu\> 
- * @author Sean Wessels \<seanwes@uw.edu\>
  *  
  * @version 1.0.0
  * @date November 9, 2010
- * 
- * @brief The StoreInitializer class is responsible for initializing
- *	  the stores' inventory, customers, and pending transaction
- *	  commands.
- * @brief The StoreInitializer has-a StoreManager. The StoreManager
- *	  stores the inventory, customer, and command objects after 
- *	  they are instantiated in this class. After the pending
- *	  transaction commands are loaded, control is passed to the 
- *	  StoreManager to process the transactions.
  */ 
 //--------------------------------------------------------------------
 /**
  * Includes following features:
- * 	- Allows initialization of inventory.
- *	- Allows initialization of customers.
- * 	- Allows initialization of transactions.
+ * 	- Allows running the initialization of the stores' customers,
+ *	  transactions, and inventory.
  * 
  * Assumptions:
- * 	- The inventory, customer, and transaction files are valid
- *	  directories, and properly formatted. 
+ * 	-  
  */
 //--------------------------------------------------------------------
 
@@ -37,13 +42,10 @@
 
 #include <fstream>
 #include <string>
-#include <queue>  
 #include <iostream>
 
 #include "store_manager.h"
-#include "store_customer.h"
-#include "store_equipment.h"
-#include "store_transaction.h"
+#include "storeable.h"
 
 /**
  * @namespace std
@@ -61,27 +63,28 @@ class StoreInitializer {
 public:
 	// --------------------Default Constructor--------------------
 	/**
-	 * @brief Default Constructor.
-	 *
 	 * @brief Creates a StoreInitializer object with a NULL 
 	 * 	  StoreManager. 
-	 */ 
+	 * 	
+	 * Preconditions: None.
+	 *
+	 * Postconditions: my_manager has been set to NULL.
+	 */
 	StoreInitializer ();
 
 	
 	// --------------------Destructor-----------------------------
 	/**
-	 * @brief Destructor.
-	 *
-	 * @brief Releases resources and deletes allocated memory. 
+	 * @brief Deallocates my_manager and sets pointer to NULL.
 	 *
 	 * Preconditions:  None.
+	 *
 	 * Postconditions: my_manager was deallocated and set to NULL.
 	 */ 
 	~StoreInitializer ();
 
 
-	// ----------------------------run----------------------------
+	// --------------------run------------------------------------
 	/**
 	 * @brief Starts the process of initializing the store 
 	 *  	  inventory, customers, and transactions.  
@@ -93,6 +96,7 @@ public:
 	 *		   transactions have been initialized. 
 	 */ 
 	void run ();
+
 
 /**
  * @private
@@ -106,9 +110,8 @@ private:
  	 * Preconditions: 
 	 * Postconditions: 
 	 */
- 	void inti_store ();	
+ 	void init_store ();	
 
-	
 
 	/**
  	 * @brief For storing items and processing transactions. 

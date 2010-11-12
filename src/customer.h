@@ -14,17 +14,17 @@
 //--------------------------------------------------------------------
 /**
  * Includes following features:
- * 	- Allows setting the customers ID and name by passing it a 
- *	  file stream.
+ * 	- Allows creating a customer and specifying its' ID and name 
+ *	  by passing it a file stream.
  *	- Allows adding a Transaction object to the customers' 
  *	  transaction history. 
  * 	- Allows displaying the customers ID and name using <<.
  *	- Allows displaying the customers transaction history.
  * 
  * Assumptions:
- * 	- The file stream that is passed when setting the customers'
- *        ID and name is open, and it contains a valid format 
- *	  according to the Lab 4 specifications.  
+ * 	- The file stream that is passed when creating the customers
+ *        is open, and it contains a valid format according to the
+ *	  Lab 4 specifications.  
  *	- The Transaction object has its operator<< method overridden,
  *	  which is used by this class when displaying the transaction 
  *	  history.
@@ -51,7 +51,7 @@ using namespace std;
  */
 class Customer {
 
-	//------------------------------------------------------------
+	//---------------------operator<<-----------------------------
 	/**
 	 * @brief Overloaded operator<<. Sends the_customers' ID and
 	 *	  name to the_output stream.
@@ -80,6 +80,27 @@ public:
 	Customer ();
 
  
+	//---------------------Constructor----------------------------
+	/**
+ 	 * @brief Creates a Customer object with its ID and name set
+ 	 * 	  the values within the provided file stream.
+	 *
+ 	 * Preconditions:  the_stream is open, and contains a valid
+	 *	  	   format according to the Lab 4 specs.	
+	 *	 	   The characters leading up to the first 
+	 *		   comma are set to the ID, and the remaining
+	 *		   characters leading up to the end of line
+	 *		   are set to the name.
+	 * 
+ 	 * Postconditions: my_id was set to the characters leading up	
+	 *		   to the first comma, and my_name was set to
+	 *		   the remaining characers on that line.
+	 *	
+ 	 * @param the_stream The stream to extract my_id and my_name.
+ 	 */
+	Customer (ifstream &);
+
+
 	//---------------------Destructor-----------------------------
 	/**
  	 * @brief Deallocates transactions history list and my_name. 
@@ -92,25 +113,7 @@ public:
  	 * Postconditions: my_transactions were deleted. my_name was
 	 *		   deleted.
  	 */
-	~Customer ();
-
-
-	//---------------------setData--------------------------------
-	/**
- 	 * @brief Sets this customers' ID and name from the provided
-	 *	  file. 
-	 *
- 	 * Preconditions: the_file is open and properly formated 
-	 *	 	  according to Lab 4 specifications. 	
-	 * 
- 	 * Postconditions: my_id has been set to to all the integers
-	 * 		   leading up to the first comma in the file.
-	 *	    	   my_name has been set to the all the char-
-	 *	 	   acters following the first comma. 
-	 *	
-	 * @param the_stream The file stream to extract from.
- 	 */
-	void setData (ifstream &);
+	~Customer (); 
 	
 
 	//---------------------displayHistory-------------------------
@@ -118,7 +121,7 @@ public:
 	 * @brief Prints this customers' Transaction objects to the
 	 *	  output stream. 
  	 */
-	void displayHistory ();
+	void displayHistory () const;
 
 
 /**

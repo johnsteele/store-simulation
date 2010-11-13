@@ -103,14 +103,45 @@ public:
  */	
 private:
 
-	//---------------------init_store-----------------------------	
+	//---------------------init_customers-------------------------
 	/**
-	 * @brief initializes the store.
+	 * @brief Initializes the store customers.
 	 *
- 	 * Preconditions: 
-	 * Postconditions: 
+	 * Preconditions: The file associated with the customers is 
+	 *	 	  in its correct directory and contains a 
+	 *		  correct format according to Lab 4 specs.
+	 *
+ 	 * Postconditions: The customers have been intialized and 
+	 *		   stored in my_manager.
 	 */
- 	void init_store ();	
+	void init_customer ();
+
+
+	//---------------------init_inventory-------------------------
+	/**
+	 * @brief Initializes the store inventory.
+	 *
+	 * Preconditions: The file associated with the inventory is 
+	 *	 	  in its correct directory and contains a 
+	 *		  correct format according to Lab 4 specs.
+	 *
+ 	 * Postconditions: The inventory have been intialized and 
+	 *		   stored in my_manager.
+	 */
+	void init_inventory ();
+
+	//---------------------init_transactions----------------------
+	/**
+	 * @brief Initializes the store pending transactions.
+	 *
+	 * Preconditions: The file associated with the transactions
+	 *		  is in its correct directory and contains a 
+	 *		  correct format according to Lab 4 specs.
+	 *
+ 	 * Postconditions: The transactions have been intialized and 
+	 *		   stored in my_manager.
+	 */
+	void init_transactions ();
 
 
 	/**

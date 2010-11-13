@@ -17,6 +17,7 @@
  * Includes following features:
  * 	- Allows creating a Transaction with its values set to from 
  *	  the a provided file stream.
+ *	- Allows displaying the Transaction using overloaded op<<.
  * 
  * Assumptions:
  * 	- The file stream passed to the constructor has correct format
@@ -30,7 +31,7 @@
 #define TRANSACTION_H
 
 #include <iostream>
-#include <fstream.h>
+#include <fstream>
 #include <string.h>
 
 /**
@@ -43,6 +44,19 @@ using namespace std;
  * @class Transaction
  */
 class Transaction {
+
+	//---------------------operator<<-----------------------------
+	/**
+	 * @brief Overloaded operator<<. Sends the_transaction's type, 
+	 * 	  customer ID, and Item to the output stream. If the
+	 * 	  customer ID or Item is NULL they will not be sent 
+	 *	  to the output stream.
+ 	 *	
+ 	 * @param the_stream The output stream.
+	 * @param the_transaction The Transaction to send to the 
+	 *	  output stream.
+	 */
+	friend ostream& operator<< (ostream &, const Transaction &);
 
 /**
  * @public
@@ -84,7 +98,7 @@ public:
  	 *
 	 * @param the_stream The input stream to load the data from.
 	 */
-	Transaction (istream &);
+	Transaction (ifstream &);
 
 	
 	//---------------------destructor-----------------------------

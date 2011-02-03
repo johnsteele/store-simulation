@@ -2,7 +2,7 @@
  * @file customer.h 
  * 
  * @brief This class represents a Customer. A Customer has an ID,
- * 	  name, and list of Transaction objects. 
+ * 	  name, and a list of Transaction objects. 
  *
  * @brief CSS 343 - Lab 4
  *
@@ -14,20 +14,20 @@
 //--------------------------------------------------------------------
 /**
  * Includes following features:
- * 	- Allows creating a customer and specifying its' ID and name 
+ * 	- Allows creating a customer and specifying their ID and name 
  *	  by passing it a file stream.
  *	- Allows adding a Transaction object to the customers' 
  *	  transaction history. 
- * 	- Allows displaying the customers ID and name using <<.
- *	- Allows displaying the customers transaction history.
+ *	- Allows clients to << a Customer.
  * 
  * Assumptions:
  * 	- The file stream that is passed when creating the customers
  *        is open, and it contains a valid format according to the
  *	  Lab 4 specifications.  
- *	- The Transaction object has its operator<< method overridden,
- *	  which is used by this class when displaying the transaction 
- *	  history.
+ *	- The Transaction object has print method which is used by 
+ *	  this class when displaying the transaction history.
+ *	- When adding a Transaction to a customers' transaction list
+ *	  the customer takes ownership of the object.
  */
 //--------------------------------------------------------------------
  
@@ -37,8 +37,10 @@
 
 #include <fstream>
 #include <iostream>
-#include <string.h>
-#include <list.h>
+#include <string>
+#include <list>
+#include "transaction.h"
+
 
 /**
  * @namespace STD
@@ -53,14 +55,19 @@ class Customer {
 
 	//---------------------operator<<-----------------------------
 	/**
-	 * @brief Overloaded operator<<. Sends the_customers' ID and
-	 *	  name to the_output stream.
- 	 *	
- 	 * @param the_stream The output stream.
-	 * @param the_customer The customer who's ID and name is to be
- 	 *	  	       sent to the output stream.
+	 * @brief Overloaded output operator.
+	 * 
+	 * Preconditions customer is not NULL.
+	 * 
+	 * Postconditions: my_id, my_name, and my_transactions have
+ 	 *		   been sent to the outupt stream.
+	 * 
+	 * @param output The output stream.
+	 * @param customer The customer to output.
+	 * @return The output sream.
 	 */
-	friend ostream& operator<< (ostream &, const Customer &);
+	friend ostream& operator<< (ostream &output, 
+					const Customer &customer);
 
 /**
  * @public 
@@ -69,59 +76,99 @@ public:
 
 	//---------------------Constructor----------------------------
 	/**
- 	 * @brief Creates a Customer object with a NULL name, an ID
- 	 * 	  of zero, and an empty list of Transaction objects.
+ 	 * @brief Creates a Customer object with its' name and ID 
+	 *	  set to NULL, and an empty transaction history list.
 	 *
  	 * Preconditions:  None.
 	 * 
- 	 * Postconditions: my_name was set to NULL, my_id set to zero
-	 *		   and my_transactions set to NULL.
+ 	 * Postconditions: my_name and my_id have been set to NULL, 
+ 	 *		   my_transactions was instantiated.
  	 */
 	Customer ();
 
- 
+
 	//---------------------Constructor----------------------------
 	/**
  	 * @brief Creates a Customer object with its ID and name set
- 	 * 	  the values within the provided file stream.
+ 	 * 	  to the values within the provided file stream.
 	 *
- 	 * Preconditions:  the_stream is open, and contains a valid
+ 	 * Preconditions:  input is open, and contains a valid
 	 *	  	   format according to the Lab 4 specs.	
 	 *	 	   The characters leading up to the first 
 	 *		   comma are set to the ID, and the remaining
 	 *		   characters leading up to the end of line
-	 *		   are set to the name.
+	 *		   are set to the name. A space separates the
+	 *		   first and last name.
 	 * 
  	 * Postconditions: my_id was set to the characters leading up	
 	 *		   to the first comma, and my_name was set to
 	 *		   the remaining characers on that line.
 	 *	
- 	 * @param the_stream The stream to extract my_id and my_name.
+ 	 * @param input The stream to extract my_id and my_name.
  	 */
-	Customer (ifstream &);
+	Customer (const ifstream &input);
 
 
 	//---------------------Destructor-----------------------------
 	/**
- 	 * @brief Deallocates transactions history list and my_name. 
+ 	 * @brief Deallocates the transaction list and name. 
 	 *
- 	 * Preconditions:  my_transactions points to the first Node 
- 	 * 		   in the list of transactions, or NULL if 
-	 *	 	   the list is empty. my_name points to a 
-	 *	 	   dynamically allocated array.
+ 	 * Preconditions:  my_transactions points to the list of 
+	 *		   transactions or NULL. my_id points to a 
+	 *		   dynamically allocated array. 	
+	 *		   my_name points to a string object. 
 	 * 
- 	 * Postconditions: my_transactions were deleted. my_name was
-	 *		   deleted.
+ 	 * Postconditions: my_transactions and my_name were deleted.
  	 */
 	~Customer (); 
 	
 
-	//---------------------displayHistory-------------------------
+	//---------------------addTransaction-------------------------
 	/**
-	 * @brief Prints this customers' Transaction objects to the
-	 *	  output stream. 
- 	 */
-	void displayHistory () const;
+	 * @brief Adds a the provided Transaction object to this 
+	 * 	  Customer.
+	 *
+	 * Preconditions: None.
+	 *
+	 * Postconditions: The Transaction object is added to the end
+	 *		   of the Transaction list.
+	 *	
+ 	 * @param transaction The Transaction to add.
+	 */
+	void addTransaction (const Transaction *transaction);
+
+	
+	//---------------------operator<------------------------------
+	/**
+	 * @brief Compares this Customer with the_other for less than
+	 * 	  value. Comparisons are made with name.
+	 * 
+	 * Preconditions: my_name has been initialized.
+	 *
+	 * Postconditions: True was returned if this customer was less
+	 *		   than the_other.
+	 *
+	 * @param the_other The other customer to compare with.
+	 * @return True if this customer was less than the_other, 
+	 *	   false otherwise.
+	 */
+	bool operator< (const Customer &the_other) const;
+	
+
+	//---------------------operator==-----------------------------
+	/**
+	 * @brief Compares this Customer with the_other for equality.
+	 *
+	 * Preconditions: my_name, my_id, and my_transactions have
+	 *		  been initialized.
+	 * 
+	 * Postconditions: True was retuned if this is equal to 	
+	 *		   the_other, false otherwise.
+	 * 
+	 * @param the_other The other customer to compare with.
+	 * @return True if equal, false otherwise.
+	 */
+	bool operator== (const Customer &the_other) const; 
 
 
 /**
@@ -132,17 +179,17 @@ private:
 	/**
 	 * @brief The customer ID.
 	 */	
-	int *my_id;	
+	int my_id;	
 
 	/**
  	 * @brief The customer name.
 	 */
-	char *my_name;
-	
+	string my_name;
+
 	/**
  	 * @brief The Transaction history list.
 	 */
-	list<Transaction> my_history; 
+	list<Transaction> *my_history; 
 };
 #endif /* CUSTOMER_H */
 

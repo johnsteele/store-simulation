@@ -1,9 +1,8 @@
 /**
  * @file transaction.h 
  * 
- * @brief  A class to represent a Transaction. A transaction has a 
- * 	   type. Depending on the type of the transaction it might 
- * 	   also have a customer ID, and an associated Item.
+ * @brief  A class to represent a base class of Transaction. 
+ *	   A Transaction has a type. 
  *
  * @brief CSS 343 - Lab 4
  *
@@ -15,102 +14,155 @@
 //--------------------------------------------------------------------
 /**
  * Includes following features:
- * 	- Allows creating a Transaction with its values set to from 
- *	  the a provided file stream.
- *	- Allows displaying the Transaction using overloaded op<<.
- * 
+ *	- Allows printing a  Transaction.
+ *	- Allows getting the Transaction type. 
+ * 	- Allows creating a  Transaction using a specified file.  
+ *	- Allows clients to  compare Transaction for equality.
+ * 	- Allows clients to  compare Transaction for less than value.
+ *	- Allows clients to  display a Transaction using <<. 
  * Assumptions:
- * 	- The file stream passed to the constructor has correct format
- *	  according to the Lab 4 specifications.  
- *	- A Item is only needed if the transaction type is not A, I, 
- *	  or H. 
+ * 	- All derived classes of Item implement getNewInstance, and 
+ *	  within the method return a dynamically allocated object of
+ *	  the derived type. 
+ *	- The file stream passed to createNewInstance is open and 
+ *	  constains correct format according to Lab 4 specifications.  
  */
 //--------------------------------------------------------------------
 
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
-#include <iostream>
-#include <fstream>
-#include <string.h>
-
-/**
- * @namespace std 
- */
-using namespace std;
-
+#include "object.h" 
 
 /** 
  * @class Transaction
  */
-class Transaction {
-
-	//---------------------operator<<-----------------------------
-	/**
-	 * @brief Overloaded operator<<. Sends the_transaction's type, 
-	 * 	  customer ID, and Item to the output stream. If the
-	 * 	  customer ID or Item is NULL they will not be sent 
-	 *	  to the output stream.
- 	 *	
- 	 * @param the_stream The output stream.
-	 * @param the_transaction The Transaction to send to the 
-	 *	  output stream.
-	 */
-	friend ostream& operator<< (ostream &, const Transaction &);
+class Transaction : public Object {
 
 /**
  * @public
  */
 public:
 
-	//---------------------Constructor----------------------------
+	//---------------------Default-Constructor--------------------
 	/**
-	 * @brief Creates a default Transaction object with my_type
-	 *	  set to zero, my_customer_id set to NULL, an my_item 
-	 *	  set to NULL.
+	 * @brief Creates a Transaction with a default type.
 	 * 
  	 * Preconditions: None.	
 	 *
- 	 * Postconditions: my_type is zero, my_customer_id is NULL, 
-	 * 		   and my_item is NULL.
+ 	 * Postconditions: my_type was set to default value. 
 	 */
 	Transaction ();
 
 
 	//---------------------Constructor----------------------------
 	/**
-	 * @brief Creates a Transaction object with its values set 
-	 * 	  from the provided file.
+	 * @brief Creates a Transaction object with the specified 
+	 *	  type.
 	 * 
- 	 * Preconditions: the_stream is open and is correctly 
-	 *		  formatted according to Lab 4 specs. 	
+ 	 * Preconditions: None. 
 	 *
- 	 * Postconditions: my_type is set to the first character 
-	 *		   leading up to the first comma. If there is
-	 *	 	   not a comma after the first character then 	
-	 *	 	   my_customer_id and my_item are set to NULL.
-	 *	 	   If there is a comma my_customer_id is set to 
-	 *		   the characters leading up to the scond comma.
-	 *		   If there is not a second comma then my_item 
-	 *		   is set to NULL. If there is a second comma
-	 *		   then an Item object is created using the 
-	 *		   remaining characters. 
+ 	 * Postconditions: my_type was set to the type.
  	 *
-	 * @param the_stream The input stream to load the data from.
+	 * @param type The type of transaction.
 	 */
-	Transaction (ifstream &);
+	Transaction (char type);
 
 	
-	//---------------------destructor-----------------------------
+	//---------------------Destructor-----------------------------
 	/**
-	 * @brief 
+	 * @brief Deletes all dyncamic memory obtained by this 	
+ 	 *	  Transaction.
 	 * 
- 	 * Preconditions: None.	
+ 	 * Preconditions: None. 
 	 *
- 	 * Postconditions: my_item has been deleted. 
+ 	 * Postconditions: Recources have been released. 
 	 */
-	~Transaction ();
+	virtual ~Transaction ();
 
+
+	//---------------------print----------------------------------
+	/**
+	 * @brief Prints this transaction's type.
+	 *
+	 * Preconditions: None.
+	 *
+	 * Postconditions: This transaction type was printed to the
+	 *		   standard output stream.  
+	 */
+	virtual void print () const;
+
+
+	//---------------------getType--------------------------------
+	/**
+	 * @brief Retuns the transaction type.	
+ 	 *
+ 	 * Preconditions: my_type is set to the transaction type.
+	 *
+	 * Postconditions: my_type is returned.
+	 *
+	 * @return The Transaction type is returned.	
+	 */
+	char getType () const;
+
+
+	//---------------------getNewInstance-------------------------
+	/**
+	 * @brief Retuns a pointer to a new instance of the derived
+ 	 *	  Transaction. The data of the new object will be set
+  	 *	  using the provided file stream.
+	 *	
+ 	 * Preconditions: The file stream is open and correctly 
+	 *		  formatted according to Lab 4 specs.  	
+	 *
+	 * Postconditions: A new object of the derived type was 
+	 *		   created using the provided file to set 
+	 *		   its data. A pointer to the object was then
+	 *		   returned.
+	 *
+	 * @param input The input stream to extract from.
+	 * @return A pointer to a  new instance of the derived
+	 *	   Transaction.
+	 */
+	virtual Transaction * getNewInstance 
+					(ifstream &input) const = 0;
+
+
+	//---------------------operator<------------------------------
+	/**
+	 * @brief Compares this Object with the_other for less than 
+	 *	  value.
+	 *
+	 * Preconditions: The data members of this Object have been 
+	 *	  	  initialized.
+ 	 *
+	 * Prostconditions: Returned true if this Object was less than
+	 *		    the_other.
+	 *	 
+ 	 * @param the_other The other Object to compare with this 
+ 	 *	            Object. 
+	 * @return True if this Object is less than the_other, 
+	 *	   false otherwise. 
+ 	 */
+	virtual bool operator< (const Object &the_other) const;
+
+
+	//---------------------operator==-----------------------------
+	/**
+	 * @brief Compares this Object with the_other Object. 
+	 *
+	 * Preconditions: The data members of this Object have been 
+	 *		  initialized.
+	 *
+	 * Postconditions: Returned true if this Object was equal to 
+	 *		   the_other.
+	 *
+	 * @param the_other The other Object to compare with this
+	 *		    Object.
+	 * @return True if the_other is equal to this Object, 
+	 *	   false otherwise.
+ 	 */
+	virtual bool operator== (const Object &the_other) const; 
 
 /**
  * @private
@@ -120,34 +172,7 @@ private:
 	/**
  	 * @brief The type of transaction. 
 	 */
-	char my_type;
-
-
-	/**
-	 * @brief The customers' ID associated with this Tranaction.
-	 *
-	 * @todo  This might be bad design having this since some
-	 *  	  transactions don't have customer ID. Sure we could 
-	 *	  just set it to NULL, which is our plan, but is that
-	 *	  good practice?
-	 */	
-	int *my_customer_id;	
-
- 
-	/**
- 	 * @brief A pointer to the Item associated with this
-	 *	  transaction.
- 	 *	 
-	 * @todo Again, this might be bad design since not every 
-	 *	 Transaction has an associated Item. 
- 	 *	
- 	 * @example If (my_type == 'H' || my_type == 'I' || 
-	 *	         my_type == 'A') we will not need a 
-	 *	    Item object for these transactions, so it 
-	 *	    might be bad design to have this, for now
-	 *	    the plan is to set it NULL if not used.
-	 */
-	Item *my_item;
+	char my_type; 
 };
 #endif /* TRANSACTION_H */
 

@@ -124,7 +124,7 @@ public:
 	 * @return Returns true if this Classical CD is less than 
 	 *	   the_other, false otherwise. 
  	 */
-	virtual bool operator< (const Item &the_other) const; 
+	virtual bool operator< (const Object &the_other) const; 
 
 
 	//---------------------operator==-----------------------------
@@ -145,7 +145,7 @@ public:
 	 * @return Returns true if the_other is equal to this, false
 	 *		   otherwise.
  	 */
-	virtual bool operator== (const Item &the_other) const; 
+	virtual bool operator== (const Object &the_other) const; 
 
 	
 	//---------------------print----------------------------------

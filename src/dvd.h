@@ -120,7 +120,7 @@ public:
 	 * @return Returns true if this DVD is less than the_other, 
 	 *	   false otherwise. 
  	 */
-	virtual bool operator< (const Item &the_other) const; 
+	virtual bool operator< (const Object &the_other) const; 
 
 
 	//---------------------operator==-----------------------------
@@ -137,7 +137,7 @@ public:
 	 * @return Returns true if the_other is equal to this DVD, 
 	 *	   false otherwise.
  	 */
-	virtual bool operator== (const Item &the_other) const; 
+	virtual bool operator== (const Object &the_other) const; 
 };
 #endif /* DVD_H */
 

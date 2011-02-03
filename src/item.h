@@ -17,6 +17,7 @@
  * Includes following features:
  * 	- Allows clients to create a new instance of a derived type 
  *	  by calling getNewInstance. 
+ *	- Allows client to << a Item.
  * 	- Allows clients to compare Items for equality.
  * 	- Allows clients to compare Items for less than value.
  *	- Allows clients to print the Item.
@@ -33,19 +34,29 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include <fstream> 
-#include <string>
-#include <iostream>
-
-/**
- * @namespace std
- */
-using namespace std;
+#include <string> 
+#include "object.h" 
 
 /**
  * @class Item
  */
-class Item {
+class Item : public Object {
+
+	//---------------------operator<<-----------------------------
+	/**
+	 * @brief Overloaded output operator.
+	 * 
+	 * Preconditions: item is not NULL.
+	 * 
+	 * Postconditions: The data members of this item have been 
+	 *		   sent to the output stream.
+	 * 
+	 * @param output The output stream.
+	 * @param item The item to output.
+	 * @return The output stream.
+	 */
+	friend ostream& operator<< (ostream &output, 
+					const Item &item);
 
 /**
  * @public
@@ -100,13 +111,15 @@ public:
  	 *	  the provided file stream.
 	 *	
  	 * Preconditions: The file stream is open and correctly 
-	 *		  formatted according to Lab 4 specs.  *	
-	 * Postconditions: A new object of the derived type is created
-	 *		   using the provided file to set its data.	
- 	 *		   A pointer to the object is then returned.
+	 *		  formatted according to Lab 4 specs.  
+	 *	
+	 * Postconditions: A new object of the derived type was 
+	 *		   created using the provided file to set 
+	 *		   its data. A pointer to the object was then
+	 *		   returned.
 	 *
-	 * @param intput The input stream to extract from.
-	 * @return Returns a pointer to a  new instance of the derived
+	 * @param input The input stream to extract from.
+	 * @return A pointer to a  new instance of the derived
 	 *	   Item.
 	 */
 	virtual Item * getNewInstance (ifstream &input) const = 0;
@@ -120,14 +133,14 @@ public:
 	 * Preconditions: The data members of this Item have been 
 	 *	  	  initialized.
  	 *
-	 * Prostconditions: Returns true if this Item is less than
+	 * Prostconditions: Returned true if this Item was less than
 	 *		    the_other.
 	 *	 
  	 * @param the_other The other Item to compare with this Item. 
-	 * @return Returns true if this Item is less than the_other, 
+	 * @return True if this Item is less than the_other, 
 	 *	   false otherwise. 
  	 */
-	virtual bool operator< (const Item &the_other) const = 0; 
+	virtual bool operator< (const Object &the_other) const = 0; 
 
 
 	//---------------------operator==-----------------------------
@@ -137,14 +150,14 @@ public:
 	 * Preconditions: The data members of this Item have been 
 	 *		  initialized.
 	 *
-	 * Postconditions: Returns true if this Item is equal to 
+	 * Postconditions: Returned true if this Item was equal to 
 	 *		   the_other.
 	 *
 	 * @param the_other The other Item to compare with this Item.
-	 * @return Returns true if the_other is equal to this Item, 
+	 * @return True if the_other is equal to this Item, 
 	 *	   false otherwise.
  	 */
-	virtual bool operator== (const Item &the_other) const = 0; 
+	virtual bool operator== (const Object &the_other) const = 0; 
 
 
 	//---------------------print----------------------------------
@@ -174,9 +187,9 @@ protected:
 	 *
 	 * Preconditions: my_name is initialized.
 	 *
-	 * Postconditions: my_name is returned.
+	 * Postconditions: my_name was returned.
 	 *
-	 * @return Returns the name of this Item.	
+	 * @return The name of this Item.	
 	 */
 	const string getName () const;
 
@@ -188,9 +201,9 @@ protected:
  	 *
 	 * Preconditions: my_title is initialized.
 	 *
- 	 * Postconditions: my_title is returned.
+ 	 * Postconditions: my_title was returned.
 	 * 
-	 * @return Returns the title of this Item.
+	 * @return The title of this Item.
 	 */	
 	const string getTitle () const;
 
@@ -202,9 +215,9 @@ protected:
  	 *
 	 * Preconditions: my_year is initialized.
 	 *
- 	 * Postconditions: my_year is returned.
+ 	 * Postconditions: my_year was returned.
 	 * 
-	 * @return Returns the year of this Item.
+	 * @return The year of this Item.
 	 */	
 	int getYear () const;
 
@@ -214,13 +227,13 @@ protected:
  */
 private:
 
--	/**
+	/**
 	 * @brief The type of Item.
 	 */
 	char my_type;
 
 	/**
- 	 * @brief The name or director of this Item.
+ 	 * @brief The artist name or director of this Item.
 	 */
 	string my_name;	
 

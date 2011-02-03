@@ -16,8 +16,16 @@
  */ 
 //--------------------------------------------------------------------
 
+#include "store_initializer.h"
+
+/**
+ * @brief Starts the store initialization process.
+ * 
+ * @return Zero for success. 
+ */
 int main (void) 
 {
+	
 	StoreInitializer store_init;
 	store_init.run();	
 	return 0;
